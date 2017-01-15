@@ -20,8 +20,8 @@ class MongoImporter:
         self.collection = self.db[config_mongo['MONGO_SONGCI_COLLECTION']]
 
     def import_data(self):
-        for collection in self.collection.find():
-            if collection:
-                processor = VerseProcessor(collection['content'])
-                result = processor.pre_process().punctuation_cut().emblem_cut()
-                return result.verse_list
+        for document in self.collection.find():
+            if document:
+                processor = VerseProcessor(document['content'])
+                result = processor.pre_process().punctuation_cut().emblem_cut().verse_list
+                return result
