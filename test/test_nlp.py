@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from processor.nlp import VerseProcessor
+from processor.verse import VerseProcessor
 
 
 class TestNlp(TestCase):
