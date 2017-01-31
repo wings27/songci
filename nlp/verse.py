@@ -1,7 +1,7 @@
 import re
 
 
-class VerseProcessor:
+class Verse:
     _punctuation_list = re.compile('\\n+|,|!|:|;|\(|\)|，|。|？|！|…|：|；|、|‘|’|“|”|（|）')
     _comment = re.compile('\\(.+?\\)')
 
@@ -14,7 +14,7 @@ class VerseProcessor:
     def result(self):
         return self._verse_list
 
-    def pre_process(self):
+    def trim_comment(self):
         result = []
         for verse in self._verse_list:
             result.append(self._comment.sub('', verse))

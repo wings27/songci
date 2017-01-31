@@ -17,5 +17,6 @@ class MongoDataSource:
         self._db = self._client[config_mongo['MONGO_DB_SONGCI']]
         self._collection = self._db[config_mongo['MONGO_SONGCI_COLLECTION']]
 
+    @property
     def document_generator(self):
         return (document for document in self._collection.find() if document and document['content'])
