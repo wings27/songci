@@ -3,18 +3,26 @@ import operator
 from nlp.emblem import Emblem
 from processor.data_source import MongoDataSource
 
-if __name__ == '__main__':
-    FREQ_THRESHOLD = 1
-    data_source = MongoDataSource()
-    emblem = Emblem(data_source.document_generator)
-    tf_stat = emblem.emblem_tf()
-    tf_list = sorted(tf_stat.items(), key=operator.itemgetter(1), reverse=True)
+data_source = MongoDataSource()
+emblem = Emblem(data_source.document_generator)
 
-    total_len = len(tf_list)
-    last_count = 0
-    last_freq = 0
-    for tf_item in tf_list:
-        emblem_name, emblem_count = tf_item
-        if emblem_count > FREQ_THRESHOLD:
-            freq = emblem_count / total_len
-            data_source.save_collection('emblem', {'name': emblem_name}, {'$set': {'freq': freq}})
+
+def stat_emblem_tf():
+    count_threshold = 1
+    tf = emblem.emblem_term_freq()
+    tf_sorted = sorted(tf.items(), key=operator.itemgetter(1), reverse=True)
+    total_len = len(tf_sorted)
+
+    prev_count = prev_freq = 0  # cache previous quotient (a.k.a. freq) to improve performance
+    for tf_item in tf_sorted:  # todo: optimize this using concurrency
+        emblem_name, count = tf_item
+        if count <= count_threshold:
+            break
+        freq = prev_freq if count == prev_count else count / total_len
+        data_source.save_to_collection('emblem', {'name': emblem_name}, {'freq': freq})
+        prev_count = count
+        prev_freq = freq
+
+
+if __name__ == '__main__':
+    stat_emblem_tf()

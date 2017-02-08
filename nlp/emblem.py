@@ -9,11 +9,11 @@ class Emblem:
     def result(self):
         return self._docs
 
-    def emblem_tf(self):
+    def emblem_term_freq(self):
         stat = {}
         for doc in self._docs:
-            verse_processor = Verse(doc['content'])
-            emblem_cut_result = verse_processor.trim_comment().punctuation_cut().emblem_cut().result
+            verse = Verse(doc['content'])
+            emblem_cut_result = verse.emblem_cut()
             for emblem in emblem_cut_result:
                 stat[emblem] = stat.get(emblem, 0) + 1
         return stat
