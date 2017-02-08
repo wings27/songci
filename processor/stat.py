@@ -22,6 +22,8 @@ def stat_emblem_tf():
         data_source.save_to_collection('emblem', {'name': emblem_name}, {'freq': freq})
         prev_count = count
         prev_freq = freq
+    data_source.create_index('emblem', 'name', unique=True)
+    data_source.create_index('emblem', 'freq')
 
 
 if __name__ == '__main__':

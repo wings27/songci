@@ -23,3 +23,6 @@ class MongoDataSource:
 
     def save_to_collection(self, col_name, col_filter, col_update):
         self._db[col_name].update_one(col_filter, {'$set': col_update}, upsert=True)
+
+    def create_index(self, col_name, index_field, **kwargs):
+        self._db[col_name].create_index(index_field, name=index_field + '_index', **kwargs)
