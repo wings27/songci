@@ -20,3 +20,6 @@ class MongoDataSource:
     @property
     def document_generator(self):
         return (document for document in self._collection.find() if document and document['content'])
+
+    def save_collection(self, col_name, col_filter, col_update):
+        self._db[col_name].update_one(col_filter, col_update, upsert=True)
