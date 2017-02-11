@@ -5,10 +5,6 @@ class Emblem:
     def __init__(self, docs):
         self._docs = docs
 
-    @property
-    def result(self):
-        return self._docs
-
     def emblem_term_freq(self):
         stat = {}
         for doc in self._docs:
