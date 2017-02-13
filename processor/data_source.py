@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import configparser
 
 from pymongo import MongoClient
@@ -17,11 +15,12 @@ class MongoDataSource:
         self._db = self._client[config_mongo['MONGO_DB_SONGCI']]
         self._collection = self._db[config_mongo['MONGO_SONGCI_COLLECTION']]
 
-    @property
-    def document_generator(self):
+    def find(self):
+        # todo change if statement to db filter, add filter as a parameter.
+        # todo make collection name a parameter instead of reading from config.
         return (document for document in self._collection.find() if document and document['content'])
 
-    def save_to_collection(self, col_name, col_filter, col_update):
+    def save(self, col_name, col_filter, col_update):
         self._db[col_name].update_one(col_filter, {'$set': col_update}, upsert=True)
 
     def create_index(self, col_name, index_field, **kwargs):
