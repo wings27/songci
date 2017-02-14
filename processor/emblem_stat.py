@@ -30,7 +30,6 @@ def stat_freq():
     emblem_freq_chunks = MapReduceDriver.chunks(emblem_freq_stat, int(total_len / workers))
     with multiprocessing.Pool(processes=workers) as pool:
         pool.starmap(save_freq_stat, zip(emblem_freq_chunks, repeat(total_len)))
-        pool.close()
 
     data_source.create_index('emblem', 'name', unique=True)
     data_source.create_index('emblem', 'freq_rate')
