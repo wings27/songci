@@ -25,9 +25,11 @@ def stat_freq():
     logger.info('Total length of emblem_freq_stat is %d', total_len)
 
     workers = (multiprocessing.cpu_count() or 1) * 4
-    pool = multiprocessing.Pool(processes=workers)
+
     emblem_freq_chunks = MapReduceDriver.chunks(emblem_freq_stat, int(total_len / workers))
-    pool.starmap(save_freq_stat, zip(emblem_freq_chunks, repeat(total_len)))
+    with multiprocessing.Pool(processes=workers) as pool:
+        pool.starmap(save_freq_stat, zip(emblem_freq_chunks, repeat(total_len)))
+        pool.close()
 
     data_source.create_index('emblem', 'name', unique=True)
     data_source.create_index('emblem', 'freq_rate')
