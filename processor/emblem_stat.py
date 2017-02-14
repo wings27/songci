@@ -4,21 +4,22 @@ import operator
 from itertools import repeat
 
 from mapreduce.driver import MapReduceDriver
+from mapreduce.emblem_finals import EmblemFinals
 from mapreduce.emblem_freq import EmblemFreq
 from nlp.emblem import Emblem
 from processor.data_source import MongoDataSource
 
 data_source = MongoDataSource()
 songci_list = data_source.find()
+emblem_list = Emblem(songci_list).emblem_list()
 
 logger = logging.getLogger('emblem_stat')
 logging.basicConfig(level=logging.INFO)
 
 
 def stat_freq():
-    driver_freq = MapReduceDriver(EmblemFreq.map_fn, EmblemFreq.reduce_fn)
-    emblem_list = Emblem(songci_list).emblem_list()
-    emblem_freq_stat = driver_freq(emblem_list)
+    driver = MapReduceDriver(EmblemFreq.map_fn, EmblemFreq.reduce_fn)
+    emblem_freq_stat = driver(emblem_list)
     emblem_freq_stat.sort(key=operator.itemgetter(1), reverse=True)
 
     total_len = len(emblem_freq_stat)
@@ -48,5 +49,13 @@ def save_freq_stat(freq_stat, total_len):
         prev_freq_rate = freq_rate
 
 
+def stat_finals():
+    driver = MapReduceDriver(EmblemFinals.map_fn, EmblemFinals.reduce_fn)
+    emblem_finals_stat = driver(emblem_list)
+
+    total_len = len(emblem_finals_stat)
+    print(total_len)
+
+
 if __name__ == '__main__':
-    stat_freq()
+    stat_finals()

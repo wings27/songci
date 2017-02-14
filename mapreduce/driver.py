@@ -23,9 +23,9 @@ class MapReduceDriver:
     def chunks(collection, chunk_len):
         return (collection[x:x + chunk_len] for x in range(0, len(collection), chunk_len))
 
-    def __call__(self, emblem_list):
+    def __call__(self, item_list):
         with multiprocessing.Pool(processes=self._workers) as pool:
-            chunks = list(self.chunks(emblem_list, int(len(emblem_list) / self._workers)))
+            chunks = list(self.chunks(item_list, int(len(item_list) / self._workers)))
             map_result = pool.map(self.map_func, chunks)
             partition_result = self.partition(itertools.chain(*map_result))
             reduce_result = pool.map(self.reduce_func, partition_result)
