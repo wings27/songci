@@ -11,4 +11,4 @@ class EmblemFinals:
     @staticmethod
     def reduce_fn(item_mapping):
         item_key, item_values = item_mapping
-        return item_key, tuple(sorted(item_values))
+        return item_key, tuple(sorted(set(item_values)))
