@@ -24,6 +24,8 @@ class MapReduceDriver:
         return (collection[x:x + chunk_len] for x in range(0, len(collection), chunk_len))
 
     def __call__(self, item_list):
+        if type(item_list) not in {list, tuple}:
+            item_list = tuple(item_list)
         with multiprocessing.Pool(processes=self._workers) as pool:
             chunks = list(self.chunks(item_list, int(len(item_list) / self._workers)))
             map_result = pool.map(self.map_func, chunks)
