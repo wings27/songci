@@ -13,6 +13,25 @@ from processor.data_source import MongoDataSource
 
 
 class EmblemProcessor:
+    """
+    Processor that deals with emblems.
+
+    It is normally used to extract emblems from a list of songci contents,
+    and then save them to the data source,
+    along with some other fields such as the term-frequency of emblems.
+
+    The data source is supposed be schema-free (e.g. MongoDB),
+    so the schema of emblem is defined, or rather described, within this class
+    in order to provide flexibility.
+
+    The schema of emblem:
+        - name
+        - freq_rate
+        - finals
+            - pinyin
+            - rhyme
+            - tones
+    """
     COLLECTION_EMBLEM = 'emblem'
     COLLECTION_SONGCI_CONTENT = 'songci_content'
 
