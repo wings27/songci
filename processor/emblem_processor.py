@@ -99,7 +99,7 @@ class EmblemProcessor:
 
         return result_to_be_saved
 
-    def save_emblems_field(self, emblem_with_field_list, field_name):
+    def save_emblems_field(self, emblem_with_field_list, field_name, index=True):
         """
         Save emblems along with provided field,
         where field can be any of the types that self.data_source supports.
@@ -120,10 +120,14 @@ class EmblemProcessor:
 
         self.data_source.create_index(self.COLLECTION_EMBLEM, 'name', unique=True)
         self.data_source.create_index(self.COLLECTION_EMBLEM, field_name)
+        field = emblem_with_field_list[0][1]
+        if isinstance(field, dict):
+            for key in field.keys():
+                self.data_source.create_index(self.COLLECTION_EMBLEM, field_name + '.' + key)
 
-    def _save_emblems_field(self, emblem_with_field_list, stat_field_name):
-        for (emblem_name, stat) in emblem_with_field_list:
-            self.data_source.save(self.COLLECTION_EMBLEM, {'name': emblem_name}, {stat_field_name: stat})
+    def _save_emblems_field(self, emblem_with_field_list, field_name):
+        for (emblem_name, field) in emblem_with_field_list:
+            self.data_source.save(self.COLLECTION_EMBLEM, {'name': emblem_name}, {field_name: field})
 
 
 if __name__ == '__main__':
