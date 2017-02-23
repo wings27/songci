@@ -15,11 +15,10 @@ class MongoDataSource:
         self._db = self._client[config_mongo['MONGO_DB_SONGCI']]
 
     def find(self, collection_name, *args, **kwargs):
-        collection = self._db[collection_name]
-        return (document for document in collection.find(*args, **kwargs))
+        return self._db[collection_name].find(*args, **kwargs)
 
     def save(self, collection_name, _filter, update):
-        self._db[collection_name].update_one(_filter, {'$set': update}, upsert=True)
+        return self._db[collection_name].update_one(_filter, {'$set': update}, upsert=True)
 
-    def create_index(self, col_name, index_field, **kwargs):
-        self._db[col_name].create_index(index_field, name=index_field + '_index', **kwargs)
+    def create_index(self, collection_name, index_field, **kwargs):
+        return self._db[collection_name].create_index(index_field, name=index_field + '_index', **kwargs)
