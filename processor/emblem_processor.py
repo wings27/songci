@@ -118,12 +118,13 @@ class EmblemProcessor:
         with multiprocessing.Pool(processes=workers) as pool:
             pool.starmap(self._save_emblems_field, zip(emblem_freq_chunks, repeat(field_name)))
 
-        self.data_source.create_index(self.COLLECTION_EMBLEM, 'name', unique=True)
-        self.data_source.create_index(self.COLLECTION_EMBLEM, field_name)
-        field = emblem_with_field_list[0][1]
-        if isinstance(field, dict):
-            for key in field.keys():
-                self.data_source.create_index(self.COLLECTION_EMBLEM, field_name + '.' + key)
+        if index:
+            self.data_source.create_index(self.COLLECTION_EMBLEM, 'name', unique=True)
+            self.data_source.create_index(self.COLLECTION_EMBLEM, field_name)
+            field = emblem_with_field_list[0][1]
+            if isinstance(field, dict):
+                for key in field.keys():
+                    self.data_source.create_index(self.COLLECTION_EMBLEM, field_name + '.' + key)
 
     def _save_emblems_field(self, emblem_with_field_list, field_name):
         for (emblem_name, field) in emblem_with_field_list:
