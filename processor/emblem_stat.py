@@ -40,7 +40,16 @@ class EmblemProcessor:
     logger = logging.getLogger('emblem_stat')
     logging.basicConfig(level=logging.INFO)
 
-    def stat_freq_rate(self):
+    def gen_freq_rate(self):
+        """
+        This function does two things:
+        1. Extract emblems from a list of songci contents.
+        2. Generate field freq_rate for those emblems.
+        The field freq_rate is the term-frequency rate of an emblem,
+        whose value defines whether a word is an emblem.
+
+        :return: None
+        """
         map_reduce_driver = MapReduceDriver(EmblemFreq.map_fn, EmblemFreq.reduce_fn)
         songci_list = self.data_source.find(self.COLLECTION_SONGCI_CONTENT)
 
@@ -64,10 +73,16 @@ class EmblemProcessor:
                 prev_freq_rate = freq_rate
             return ret
 
-        emblem_stat_list = map_to_freq_rate(emblem_stat_list)
-        self._save_emblems(emblem_stat_list, 'freq_rate')
+        result_to_be_saved = map_to_freq_rate(emblem_stat_list)
 
-    def stat_finals(self):
+        return result_to_be_saved
+
+    def gen_finals(self):
+        """
+        Generate fields finals.pinyin, finals.rhyme, finals.tone, etc.
+
+        :return: None
+        """
         map_reduce_driver = MapReduceDriver(EmblemFinals.map_fn, EmblemFinals.reduce_fn, workers=4)
         emblem_list = self.data_source.find(
             self.COLLECTION_EMBLEM,
@@ -75,30 +90,42 @@ class EmblemProcessor:
             sort=[('freq_rate', pymongo.DESCENDING)])
         emblem_finals_stat = map_reduce_driver((emblem['name'] for emblem in emblem_list))
 
-        self._save_emblems([(name, {
+        result_to_be_saved = [(name, {
             'pinyin': finals.pinyin,
             'rhyme': finals.rhyme,
             'tones': finals.tones,
-        }) for (name, finals) in emblem_finals_stat], 'finals')
+        }) for (name, finals) in emblem_finals_stat]
 
-    def _save_emblems(self, emblem_stat_list, stat_field_name):
-        self.logger.info('Saving field [%s], total=%d', stat_field_name, len(emblem_stat_list))
-        total_len = len(emblem_stat_list)
+        return result_to_be_saved
+
+    def save_emblems_field(self, emblem_with_field_list, field_name):
+        """
+        Save emblems along with provided field,
+        where field can be any of the types that self.data_source supports.
+
+        :param emblem_with_field_list: tuple of (emblem_name, field)
+        :param field_name: the name of that field
+
+        :return: None
+        """
+        total_len = len(emblem_with_field_list)
+        self.logger.info('Saving field [%s], total=%d', field_name, total_len)
+
         workers = (multiprocessing.cpu_count() or 1) * 4
-        emblem_freq_chunks = MapReduceDriver.chunks(emblem_stat_list, int(total_len / workers))
+        emblem_freq_chunks = MapReduceDriver.chunks(emblem_with_field_list, int(total_len / workers))
 
         with multiprocessing.Pool(processes=workers) as pool:
-            pool.starmap(self._save_emblem_stat, zip(emblem_freq_chunks, repeat(stat_field_name)))
+            pool.starmap(self._save_emblems_field, zip(emblem_freq_chunks, repeat(field_name)))
 
         self.data_source.create_index(self.COLLECTION_EMBLEM, 'name', unique=True)
-        self.data_source.create_index(self.COLLECTION_EMBLEM, stat_field_name)
+        self.data_source.create_index(self.COLLECTION_EMBLEM, field_name)
 
-    def _save_emblem_stat(self, emblem_stat, stat_field_name):
-        for (emblem_name, stat) in emblem_stat:
+    def _save_emblems_field(self, emblem_with_field_list, stat_field_name):
+        for (emblem_name, stat) in emblem_with_field_list:
             self.data_source.save(self.COLLECTION_EMBLEM, {'name': emblem_name}, {stat_field_name: stat})
 
 
 if __name__ == '__main__':
     processor = EmblemProcessor()
-    processor.stat_freq_rate()
-    processor.stat_finals()
+    processor.save_emblems_field(processor.gen_freq_rate(), 'freq_rate')
+    processor.save_emblems_field(processor.gen_finals(), 'finals')
