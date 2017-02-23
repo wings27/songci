@@ -44,11 +44,11 @@ class EmblemProcessor:
         """
         This function does two things:
         1. Extract emblems from a list of songci contents.
-        2. Generate field freq_rate for those emblems.
-        The field freq_rate is the term-frequency rate of an emblem,
+        2. Generate field of freq_rate for those emblems.
+        The field of freq_rate is the term-frequency rate of an emblem,
         whose value defines whether a word is an emblem.
 
-        :return: None
+        :return: list of tuples(emblem_name, freq_rate)
         """
         map_reduce_driver = MapReduceDriver(EmblemFreq.map_fn, EmblemFreq.reduce_fn)
         songci_list = self.data_source.find(self.COLLECTION_SONGCI_CONTENT)
@@ -79,9 +79,10 @@ class EmblemProcessor:
 
     def gen_finals(self):
         """
-        Generate fields finals.pinyin, finals.rhyme, finals.tone, etc.
+        Generate field of finals for emblems from self.data_source,
+        where finals is a dict whose keys are pinyin, rhyme, tones, etc.
 
-        :return: None
+        :return: list of tuples(emblem_name, finals)
         """
         map_reduce_driver = MapReduceDriver(EmblemFinals.map_fn, EmblemFinals.reduce_fn, workers=4)
         emblem_list = self.data_source.find(
