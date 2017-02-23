@@ -49,13 +49,18 @@ class EmblemProcessor:
         self._save_emblems(emblem_stat_list, 'freq_rate')
 
     def stat_finals(self):
-        driver = MapReduceDriver(EmblemFinals.map_fn, EmblemFinals.reduce_fn)
+        map_reduce_driver = MapReduceDriver(EmblemFinals.map_fn, EmblemFinals.reduce_fn, workers=4)
         emblem_list = self.data_source.find(
             self.COLLECTION_EMBLEM,
             projection=['name'],
             sort=[('freq_rate', pymongo.DESCENDING)])
-        emblem_finals_stat = driver((emblem['name'] for emblem in emblem_list))
-        self._save_emblems(emblem_finals_stat, 'finals')
+        emblem_finals_stat = map_reduce_driver((emblem['name'] for emblem in emblem_list))
+
+        self._save_emblems([(name, {
+            'pinyin': finals.pinyin,
+            'rhyme': finals.rhyme,
+            'tones': finals.tones,
+        }) for (name, finals) in emblem_finals_stat], 'finals')
 
     def _save_emblems(self, emblem_stat_list, stat_field_name):
         self.logger.info('Saving field [%s], total=%d', stat_field_name, len(emblem_stat_list))
