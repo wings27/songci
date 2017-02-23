@@ -10,4 +10,5 @@ dependencies:
 - pip:
   - jieba==0.38
   - pymongo==3.3.1
+  - pypinyin==0.16.0
 
