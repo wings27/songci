@@ -18,7 +18,9 @@ class MongoDataSource:
         return self._db[collection_name].find(*args, **kwargs)
 
     def save(self, collection_name, _filter, update):
-        return self._db[collection_name].update_one(_filter, {'$set': update}, upsert=True)
+        return self._db[collection_name].update_one(
+            _filter, {'$set': update}, upsert=True)
 
     def create_index(self, collection_name, index_field, **kwargs):
-        return self._db[collection_name].create_index(index_field, name=index_field + '_index', **kwargs)
+        return self._db[collection_name].create_index(
+            index_field, name=index_field + '_index', **kwargs)
