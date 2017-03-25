@@ -6,7 +6,7 @@ from pymongo import MongoClient
 class MongoDataSource:
     def __init__(self):
         config = configparser.ConfigParser()
-        config.read('../songci.conf')
+        config.read('../app.conf')
         if 'mongo' not in config:
             raise KeyError('Config section [mongo] not found.')
         config_mongo = config['mongo']
