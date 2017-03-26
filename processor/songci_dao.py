@@ -19,7 +19,8 @@ class MongoDAO:
 
     def load_songci_list(self):
         # todo change to read content.
-        return list(self.data_source.find(self.COLLECTION_SONGCI_CONTENT))
+        return [songci['content'] for songci in (self.data_source.find(
+            self.COLLECTION_SONGCI_CONTENT))]
 
     def load_emblem_list(self):
         return [emblem['name'] for emblem in (self.data_source.find(

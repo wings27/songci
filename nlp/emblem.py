@@ -10,7 +10,7 @@ class Emblem:
         if self._emblem_list is None:
             ret = []
             for songci in self._songci_list:
-                verse = Verse(songci['content'])
+                verse = Verse(songci)
                 ret.extend(verse.emblem_cut())
             self._emblem_list = ret
         return self._emblem_list
