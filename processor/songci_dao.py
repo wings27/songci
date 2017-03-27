@@ -18,7 +18,6 @@ class MongoDAO:
     data_source = MongoDataSource()
 
     def load_songci_list(self):
-        # todo change to read content.
         return [songci['content'] for songci in (self.data_source.find(
             self.COLLECTION_SONGCI_CONTENT))]
 
