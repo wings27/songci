@@ -53,10 +53,10 @@ class EmblemProcessor:
 
         :return: list of tuples(emblem_name, freq_rate)
         """
-        self.logger.info(
-            'Generating frequency rates, total=%d', len(self.emblem_list))
-
         raw_emblem_list = Emblem(self.songci_list).emblem_list()
+        self.logger.info(
+            'Generating frequency rates, total=%d', len(raw_emblem_list))
+
         map_reduce_driver = MapReduceDriver(
             EmblemFreq.map_fn, EmblemFreq.reduce_fn)
         emblem_stat_list = map_reduce_driver(raw_emblem_list)

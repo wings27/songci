@@ -63,7 +63,12 @@ class MongoDAO:
                         self.COLLECTION_EMBLEM, field_name + '.' + key)
 
     def _save_emblems_field(self, emblem_with_field_list, field_name):
-        for (emblem_name, field) in emblem_with_field_list:
-            self.data_source.save(
-                self.COLLECTION_EMBLEM, {'name': emblem_name},
-                {field_name: field})
+        self.data_source.save_many(
+            self.COLLECTION_EMBLEM,
+            [({'name': name}, {field_name: field})
+             for (name, field) in emblem_with_field_list])
+        # for (emblem_name, field) in emblem_with_field_list:
+        #     self.data_source.save(
+        #         self.COLLECTION_EMBLEM, {'name': emblem_name},
+        #         {field_name: field})
+#

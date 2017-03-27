@@ -1,6 +1,7 @@
 import configparser
 
 from pymongo import MongoClient
+from pymongo import UpdateOne
 
 
 class MongoDataSource:
@@ -20,6 +21,11 @@ class MongoDataSource:
     def save(self, collection_name, _filter, update):
         return self._db[collection_name].update_one(
             _filter, {'$set': update}, upsert=True)
+
+    def save_many(self, collection_name, filter_with_update_list):
+        return self._db[collection_name].bulk_write(
+            [UpdateOne(_filter, {'$set': update}, upsert=True)
+             for (_filter, update) in filter_with_update_list])
 
     def create_index(self, collection_name, index_field, **kwargs):
         return self._db[collection_name].create_index(
