@@ -34,29 +34,25 @@ class EmblemProcessor:
         self.songci_list = emblem_dao.load_songci_list()
 
         if 'load_emblem_list' in dir(emblem_dao):
-            loaded_emblem_list = emblem_dao.load_emblem_list()
-            if loaded_emblem_list:
-                self.emblem_list = loaded_emblem_list
-            else:
-                self._gen_emblem_list()
-        else:
-            self._gen_emblem_list()
+            self._emblem_list = emblem_dao.load_emblem_list()
 
-    def _gen_emblem_list(self):
-        self.emblem_list = [pair[0] for pair in self.gen_freq_rate()]
+    @property
+    def emblem_list(self):
+        if not self._emblem_list:
+            self.gen_freq_rate()
+        return self._emblem_list
 
     def gen_freq_rate(self):
         """
-        Generate frequency rates for emblems.
-        The field of freq_rate is the term-frequency rate of an emblem,
-        whose value defines whether a word is an emblem.
+        Generate frequency rates for all the emblems from songci_list.
+        The field freq_rate is the term-frequency rate of a word (raw_emblem),
+        and this field determines whether a word is recognized as an emblem.
 
         :return: list of tuples(emblem_name, freq_rate)
         """
-        raw_emblem_list = Emblem(self.songci_list).emblem_list()
+        raw_emblem_list = Emblem(self.songci_list).raw_emblem_list()
         self.logger.info(
             'Generating frequency rates, total=%d', len(raw_emblem_list))
-
         map_reduce_driver = MapReduceDriver(
             EmblemFreq.map_fn, EmblemFreq.reduce_fn)
         emblem_stat_list = map_reduce_driver(raw_emblem_list)
@@ -82,6 +78,7 @@ class EmblemProcessor:
             return ret
 
         result_to_be_saved = map_to_freq_rate(emblem_stat_list)
+        self._emblem_list = [name for (name, freq_rate) in result_to_be_saved]
 
         return result_to_be_saved
 
@@ -92,12 +89,13 @@ class EmblemProcessor:
 
         :return: list of tuples(emblem_name, finals)
         """
+        emblem_list = self.emblem_list
         self.logger.info(
-            'Generating finals, total=%d', len(self.emblem_list))
+            'Generating finals, total=%d', len(emblem_list))
         workers = 4 * (os.cpu_count() or 1)
         map_reduce_driver = MapReduceDriver(
             EmblemFinals.map_fn, EmblemFinals.reduce_fn, workers=workers)
-        emblem_finals_stat = map_reduce_driver(self.emblem_list)
+        emblem_finals_stat = map_reduce_driver(emblem_list)
 
         result_to_be_saved = [(name, {
             'pinyin': finals.pinyin,

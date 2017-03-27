@@ -6,7 +6,7 @@ class Emblem:
         self._songci_list = songci_list
         self._emblem_list = None
 
-    def emblem_list(self):
+    def raw_emblem_list(self):
         if self._emblem_list is None:
             ret = []
             for songci in self._songci_list:
