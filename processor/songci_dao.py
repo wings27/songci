@@ -46,11 +46,6 @@ class MongoDAO:
         emblem_freq_chunks = MapReduceDriver.chunks(
             emblem_with_field_list, int(total_len / workers))
 
-        with multiprocessing.Pool(processes=workers) as pool:
-            pool.starmap(
-                self._save_emblems_field,
-                zip(emblem_freq_chunks, repeat(field_name)))
-
         if index:
             self.data_source.create_index(
                 self.COLLECTION_EMBLEM, 'name', unique=True)
@@ -62,13 +57,13 @@ class MongoDAO:
                     self.data_source.create_index(
                         self.COLLECTION_EMBLEM, field_name + '.' + key)
 
+        with multiprocessing.Pool(processes=workers) as pool:
+            pool.starmap(
+                self._save_emblems_field,
+                zip(emblem_freq_chunks, repeat(field_name)))
+
     def _save_emblems_field(self, emblem_with_field_list, field_name):
         self.data_source.save_many(
             self.COLLECTION_EMBLEM,
             [({'name': name}, {field_name: field})
              for (name, field) in emblem_with_field_list])
-        # for (emblem_name, field) in emblem_with_field_list:
-        #     self.data_source.save(
-        #         self.COLLECTION_EMBLEM, {'name': emblem_name},
-        #         {field_name: field})
-#
