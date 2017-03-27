@@ -26,7 +26,7 @@ class EmblemProcessor:
             - tones
     """
 
-    logger = logging.getLogger('EmblemProcessor')
+    logger = logging.getLogger('processor.EmblemProcessor')
     logging.basicConfig(level=logging.INFO)
 
     def __init__(self, emblem_dao):

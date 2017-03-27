@@ -12,7 +12,7 @@ class MongoDAO:
     COLLECTION_EMBLEM = 'emblem'
     COLLECTION_SONGCI_CONTENT = 'songci_content'
 
-    logger = logging.getLogger('MongoDAO')
+    logger = logging.getLogger('processor.MongoDAO')
     logging.basicConfig(level=logging.INFO)
 
     data_source = MongoDataSource()
