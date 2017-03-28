@@ -21,7 +21,8 @@ class MapReduceDriver:
 
     @staticmethod
     def chunks(collection, chunk_len):
-        return (collection[x:x + chunk_len] for x in range(0, len(collection), chunk_len))
+        return (collection[x:x + chunk_len]
+                for x in range(0, len(collection), chunk_len))
 
     def __call__(self, items):
         if not isinstance(items, (list, tuple)):

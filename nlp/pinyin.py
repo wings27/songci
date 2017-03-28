@@ -15,5 +15,6 @@ def finals_info(word):
 
     word_finals_tone = Finals(pinyin=word_pinyin,
                               rhyme=word_pinyin[-1][:-1],
-                              tones=''.join((char_pinyin[-1] for char_pinyin in word_pinyin)))
+                              tones=''.join((char_pinyin[-1]
+                                             for char_pinyin in word_pinyin)))
     return word_finals_tone

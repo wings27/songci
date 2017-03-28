@@ -1,6 +1,5 @@
 import logging
 import operator
-import os
 
 from mapreduce.driver import MapReduceDriver
 from mapreduce.emblem_finals import EmblemFinals
