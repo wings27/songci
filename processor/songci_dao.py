@@ -41,7 +41,7 @@ class MongoDAO:
         total_len = len(emblem_with_field_list)
         self.logger.info('Saving field [%s], total=%d', field_name, total_len)
 
-        workers = 4 * (multiprocessing.cpu_count() or 1)
+        workers = (multiprocessing.cpu_count() or 1)
         emblem_freq_chunks = MapReduceDriver.chunks(
             emblem_with_field_list, int(total_len / workers))
 

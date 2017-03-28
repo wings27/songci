@@ -91,9 +91,8 @@ class EmblemProcessor:
         emblem_list = self.emblem_list
         self.logger.info(
             'Generating finals, total=%d', len(emblem_list))
-        workers = (os.cpu_count() or 1) << 3
         map_reduce_driver = MapReduceDriver(
-            EmblemFinals.map_fn, EmblemFinals.reduce_fn, workers=workers)
+            EmblemFinals.map_fn, EmblemFinals.reduce_fn)
         emblem_finals_stat = map_reduce_driver(emblem_list)
 
         result_to_be_saved = [(name, {
