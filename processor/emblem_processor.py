@@ -6,7 +6,6 @@ from mapreduce.driver import MapReduceDriver
 from mapreduce.emblem_finals import EmblemFinals
 from mapreduce.emblem_freq import EmblemFreq
 from nlp.emblem import Emblem
-from processor.songci_dao import MongoDAO
 
 
 class EmblemProcessor:
@@ -104,11 +103,3 @@ class EmblemProcessor:
         }) for (name, finals) in emblem_finals_stat]
 
         return result_to_be_saved
-
-
-if __name__ == '__main__':
-    mongo_dao = MongoDAO()
-    processor = EmblemProcessor(mongo_dao)
-
-    mongo_dao.save_emblems_field(processor.gen_freq_rate(), 'freq_rate')
-    mongo_dao.save_emblems_field(processor.gen_finals(), 'finals')

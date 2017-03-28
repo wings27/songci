@@ -7,7 +7,7 @@ from pymongo import UpdateOne
 class MongoDataSource:
     def __init__(self):
         config = configparser.ConfigParser()
-        config.read('../app.conf')
+        config.read('./app.conf')
         if 'mongo' not in config:
             raise KeyError('Config section [mongo] not found.')
         config_mongo = config['mongo']
