@@ -23,7 +23,7 @@ class Verse:
             self._pre_processed = True
 
     def _trim_comment(self):
-        re_comment = re.compile('\\(.+?\\)')
+        re_comment = re.compile(r'\(.+?\)')
         result = []
         for verse in self._verses:
             result.append(re_comment.sub('', verse))
@@ -32,7 +32,7 @@ class Verse:
 
     def _punctuation_cut(self):
         re_punctuation_list = re.compile(
-            '\\n+|,|!|:|;|\(|\)|，|。|？|！|…|：|；|、|‘|’|“|”|（|）|《|》')
+            r'\n+|,|!|:|;|\(|\)|，|。|？|！|…|：|；|、|‘|’|“|”|（|）|《|》')
         result = []
         for verse in self._verses:
             list_split = re_punctuation_list.split(verse)
