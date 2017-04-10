@@ -32,7 +32,7 @@ class Verse:
 
     def _punctuation_cut(self):
         re_punctuation_list = re.compile(
-            r'\n+|,|!|:|;|\(|\)|，|。|？|！|…|：|；|、|‘|’|“|”|（|）|《|》')
+            r'\s+|,|!|:|;|\(|\)|，|。|？|！|…|：|；|、|‘|’|“|”|（|）|《|》')
         result = []
         for verse in self._verses:
             list_split = re_punctuation_list.split(verse)
