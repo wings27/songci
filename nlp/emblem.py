@@ -1,4 +1,4 @@
-from nlp.verse import Verse
+from nlp.verse import emblem_cut
 
 
 class Emblem:
@@ -10,7 +10,6 @@ class Emblem:
         if self._emblem_list is None:
             ret = []
             for songci in self._songci_list:
-                verse = Verse(songci)
-                ret.extend(verse.emblem_cut())
+                ret.extend(emblem_cut(songci))
             self._emblem_list = ret
         return self._emblem_list
