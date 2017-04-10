@@ -1,6 +1,7 @@
 import re
 
 
+# todo Do not use class.
 class Verse:
     def __init__(self, verses):
         if isinstance(verses, str):
