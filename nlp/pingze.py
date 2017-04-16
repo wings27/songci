@@ -3,5 +3,5 @@ ping_ze_chars = {
     'ZE': 'B',
     'PING_YUN': 'C',
     'ZE_YUN': 'D',
-    'ANY': "X",
+    'ANY': 'X',
 }
