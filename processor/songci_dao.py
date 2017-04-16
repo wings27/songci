@@ -26,7 +26,7 @@ class AbstractDAO(metaclass=ABCMeta):
     
         :param emblem_with_field_list: tuple of (emblem_name, field)
         :param field_name: the name of that field
-        :param index: whether it is needed to create an index
+        :param index: whether to create an index on the field.
     
         :return: None
         """
@@ -53,16 +53,6 @@ class MongoDAO(AbstractDAO):
 
     def save_emblems_field(
             self, emblem_with_field_list, field_name, index=True):
-        """
-        Save emblems along with provided field,
-        where field can be any of the types that self.data_source supports.
-
-        :param emblem_with_field_list: tuple of (emblem_name, field)
-        :param field_name: the name of that field
-        :param index: whether it is needed to create an index
-
-        :return: None
-        """
         total_len = len(emblem_with_field_list)
         self.logger.info('Saving field [%s], total=%d', field_name, total_len)
 
