@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+from abc import abstractmethod, ABCMeta
 from itertools import repeat
 
 import pymongo
@@ -8,7 +9,31 @@ from mapreduce.driver import MapReduceDriver
 from processor.data_source import MongoDataSource
 
 
-class MongoDAO:
+class AbstractDAO(metaclass=ABCMeta):
+    @abstractmethod
+    def load_songci_list(self):
+        pass
+
+    @abstractmethod
+    def load_emblem_list(self):
+        pass
+
+    @abstractmethod
+    def save_emblems_field(self, emblem_with_field_list, field_name, index):
+        """
+        Save emblems along with provided field,
+        where field can be any of the types that self.data_source supports.
+    
+        :param emblem_with_field_list: tuple of (emblem_name, field)
+        :param field_name: the name of that field
+        :param index: whether it is needed to create an index
+    
+        :return: None
+        """
+        pass
+
+
+class MongoDAO(AbstractDAO):
     COLLECTION_EMBLEM = 'emblem'
     COLLECTION_SONGCI_CONTENT = 'songci_content'
 
