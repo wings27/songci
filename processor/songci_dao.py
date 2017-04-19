@@ -51,6 +51,14 @@ class MongoDAO(AbstractDAO):
             self.COLLECTION_EMBLEM,
             projection=['name'], sort=[('freq_rate', pymongo.DESCENDING)]))]
 
+    def random_emblem_name(self, where=None, size=1):
+        pipeline = [
+            {"$match": where},
+            {"$sample": {"size": size}},
+            {"$project": {"name": "$name"}},
+        ]
+        return self.data_source.aggregate(self.COLLECTION_EMBLEM, pipeline)
+
     def save_emblems_field(
             self, emblem_with_field_list, field_name, index=True):
         total_len = len(emblem_with_field_list)
