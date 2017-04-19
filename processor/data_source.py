@@ -18,6 +18,9 @@ class MongoDataSource:
     def find(self, collection_name, *args, **kwargs):
         return self._db[collection_name].find(*args, **kwargs)
 
+    def aggregate(self, collection_name, pipeline, **kwargs):
+        return self._db[collection_name].aggregate(pipeline, **kwargs)
+
     def save(self, collection_name, _filter, update):
         return self._db[collection_name].update_one(
             _filter, {'$set': update}, upsert=True)
