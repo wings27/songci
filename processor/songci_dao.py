@@ -11,11 +11,11 @@ from processor.data_source import MongoDataSource
 
 class AbstractDAO(metaclass=ABCMeta):
     @abstractmethod
-    def load_songci_list(self):
+    def load_songci_contents(self):
         pass
 
     @abstractmethod
-    def load_emblem_list(self):
+    def load_emblem_names(self):
         pass
 
     @abstractmethod
@@ -42,11 +42,11 @@ class MongoDAO(AbstractDAO):
 
     data_source = MongoDataSource()
 
-    def load_songci_list(self):
+    def load_songci_contents(self):
         return [songci['content'] for songci in (self.data_source.find(
             self.COLLECTION_SONGCI_CONTENT))]
 
-    def load_emblem_list(self):
+    def load_emblem_names(self):
         return [emblem['name'] for emblem in (self.data_source.find(
             self.COLLECTION_EMBLEM,
             projection=['name'], sort=[('freq_rate', pymongo.DESCENDING)]))]

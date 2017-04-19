@@ -29,10 +29,10 @@ class EmblemProcessor:
 
     def __init__(self, emblem_dao):
         self.emblem_dao = emblem_dao
-        self.songci_list = emblem_dao.load_songci_list()
+        self.songci_list = emblem_dao.load_songci_contents()
 
         if 'load_emblem_list' in dir(emblem_dao):
-            self._emblem_list = emblem_dao.load_emblem_list()
+            self._emblem_list = emblem_dao.load_emblem_names()
 
     @property
     def emblem_list(self):
