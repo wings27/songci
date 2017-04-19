@@ -1,5 +1,3 @@
-import logging
-
 from processor.emblem_processor import EmblemProcessor
 from processor.songci_dao import MongoDAO
 from writer.songci_writer import SongciWriter

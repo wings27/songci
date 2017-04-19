@@ -15,7 +15,7 @@ class WordPattern:
         self.rhyme = rhyme
 
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
 
     def fetch_word(self, data_source_dao) -> (str, int):
         where = {}
@@ -101,6 +101,8 @@ class SongciWriter:
 
 
 if __name__ == '__main__':
-    songci_writer = SongciWriter(tune_name='huanxisha', rhyme='an')
-    title, content = songci_writer.write_new()
-    print('new_songci: \n《%s》\n\n%s' % (title, content))
+    # todo delete me
+    songci_writer = SongciWriter(
+        tune_name='huanxisha', rhyme='an', data_source_dao=None)
+    songci_writer._analyze()
+    print(songci_writer._word_patterns)
