@@ -3,7 +3,9 @@ import re
 from collections import deque
 from io import StringIO
 
+from mapreduce.driver import MapReduceDriver
 from nlp import pingze
+from nlp.pingze import is_yun, to_tones_regex
 from nlp.verse import sub_verses
 from tune_data import load_tune
 
@@ -46,15 +48,13 @@ class SongciWriter:
         if not self._tune.pattern:
             raise ValueError(
                 'pattern for tune [%s] is empty.' % self.tune_name)
-        pattern = self._tune.pattern
-
         self._analyze()
 
         with StringIO() as songci_io:
             pointer = 0
-            while pointer < len(pattern):
-                char = pattern[pointer]
-                if char in pingze.ping_ze_chars.values():
+            while pointer < len(self._tune.pattern):
+                char = self._tune.pattern[pointer]
+                if char in pingze.ping_ze_def.values():
                     word, pointer_step = self._next_word_pattern().fetch_word(
                         self.data_source_dao)
                 else:
@@ -73,36 +73,17 @@ class SongciWriter:
         return word_pattern
 
     def _analyze(self):
+        self._word_patterns = deque()
         verses = sub_verses(self._tune.pattern)
-        print('verses: %s' % verses)
-        # todo complete me
         rhyme = self.rhyme or 'i'
-        self._word_patterns = deque([
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=3, tones_regex='.(3|4)(1|2)', rhyme=rhyme),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=3, tones_regex='(3|4)(1|2)(1|2)', rhyme=rhyme),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=3, tones_regex='(3|4)(1|2)(1|2)', rhyme=rhyme),
+        min_emblem_len = 2
+        for verse in verses:
+            sub_patterns = list(MapReduceDriver.chunks(verse, min_emblem_len))
+            if len(verse) % 2 and len(sub_patterns) >= 2:
+                sub_patterns[-2] += sub_patterns[-1]
+                sub_patterns.pop()
 
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=3, tones_regex='(1|2)(3|4)(3|4)'),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=3, tones_regex='(3|4)(1|2)(1|2)', rhyme=rhyme),
-            WordPattern(length=2, tones_regex='.(1|2)'),
-            WordPattern(length=2, tones_regex='.(3|4)'),
-            WordPattern(length=3, tones_regex='(3|4)(1|2)(1|2)', rhyme=rhyme),
-        ])
-
-
-if __name__ == '__main__':
-    # todo delete me
-    songci_writer = SongciWriter(
-        tune_name='huanxisha', rhyme='an', data_source_dao=None)
-    songci_writer._analyze()
-    print(songci_writer._word_patterns)
+            self._word_patterns.extend((WordPattern(
+                length=len(s), tones_regex=to_tones_regex(s),
+                rhyme=rhyme if is_yun(s) else None
+            ) for s in sub_patterns))

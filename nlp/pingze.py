@@ -1,4 +1,4 @@
-ping_ze_chars = {
+ping_ze_def = {
     'PING': 'A',
     'ZE': 'B',
     'PING_YUN': 'C',
