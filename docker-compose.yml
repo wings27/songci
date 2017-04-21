@@ -1,0 +1,7 @@
+web:
+  build: .
+  net: "host"
+  working_dir: /app
+  volumes:
+    - .:/app
+  command: python run.py
