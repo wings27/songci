@@ -1,9 +1,9 @@
 # songci
 
-A [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator base on emblems shuffling and [Genetic algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm).
+A [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator based on emblems shuffling and [Genetic algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm).
 
 ## Overview
-The project is a [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator. Which basically does these things:
+The project is a [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator that basically does these things:
 
 * Analyse SongCi contents using natural language processing techniques
 * Generate naive SongCi artifacts based on specified tune patterns
@@ -75,12 +75,7 @@ If no arguments for phases are provided, the phases will default to "analyze wri
 
 ## Selected works
 
-(Randomly) selected works with tune name "《浣溪沙》":
-
->《浣溪沙· 曼舞如丝倚画阑》
->
->曼舞如丝倚画阑，玉人歌对问平安。远山绕水夜春寒。
->分水行征湖上路，关渠转运客江南。床空恨夜也应难。
+Selected works with tune name "《浣溪沙》":
 
 >《浣溪沙· 环碧边幽花褪残》
 >
