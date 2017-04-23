@@ -1,6 +1,6 @@
 # songci
 
-A [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator base on [Genetic algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm).
+A [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator base on emblems shuffling and [Genetic algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm).
 
 ## Overview
 The project is a [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator. Which basically does these things:
