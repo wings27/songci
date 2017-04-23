@@ -6,8 +6,8 @@ A [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator base on emblems 
 The project is a [SongCi](https://en.wikipedia.org/wiki/Ci_(poetry)) generator. Which basically does these things:
 
 * Analyse SongCi contents using natural language processing techniques
-* Generate naive SongCiArtifact contents based on specified tune patterns
-* Optimize the generated contents using genetic algorithms, until certain criterias are met
+* Generate naive SongCi artifacts based on specified tune patterns
+* Optimize the generated artifacts using genetic algorithms, until certain criteria is met
 
 ## Requirements
 
@@ -68,10 +68,10 @@ If no arguments for phases are provided, the phases will default to "analyze wri
 
 ## Features
 
-* Very fast NLP analysis powered by a optimized parallel (multi-processing) map-reduce driver
-* Optimized DAO for batch operations
+* Very fast NLP analysis powered by an optimized parallel (multi-processing) map-reduce driver
+* MongoDAO optimized for batch operations
 * Brief and efficient tune patterns representations
-* Customizable commands for different phases
+* Customizable arguments for different phases
 
 ## Selected works
 
