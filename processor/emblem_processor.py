@@ -33,7 +33,6 @@ class EmblemProcessor:
         if 'load_emblem_list' in dir(emblem_dao):
             self._emblem_list = emblem_dao.load_emblem_names()
 
-
     @property
     def emblem_list(self):
         if not self._emblem_list:
