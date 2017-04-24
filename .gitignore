@@ -1,6 +1,7 @@
 # project ignore
 /.idea
 /out
+/sc_scrapy/out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
