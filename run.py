@@ -13,7 +13,8 @@ def main(argv):
 
     if 'crawl' in argv:
         from sc_scrapy.execute import execute_spider
-        execute_spider('gushiwen')
+        from sc_scrapy.spiders.gushiwen import GushiwenSpider
+        execute_spider(GushiwenSpider)
 
     if 'analyse' in argv:
         processor = EmblemProcessor(mongo_dao)
