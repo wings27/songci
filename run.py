@@ -8,6 +8,13 @@ from writer.songci_writer import SongciWriter
 def main(argv):
     mongo_dao = MongoDAO()
 
+    if len(argv) <= 1:
+        argv.extend(['crawl', 'analyse', 'write'])
+
+    if 'crawl' in argv:
+        from sc_scrapy.execute import execute_spider
+        execute_spider('gushiwen')
+
     if 'analyse' in argv:
         processor = EmblemProcessor(mongo_dao)
 
@@ -23,7 +30,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    argv = sys.argv
-    if len(argv) <= 1:
-        argv.extend(['analyse', 'write'])
-    main(argv)
+    main(sys.argv)

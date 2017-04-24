@@ -1,7 +1,16 @@
-web:
+songci:
   build: .
-  net: "host"
+  ports:
+    - "6023:6023"
+  links:
+    - mongo
   working_dir: /app
   volumes:
     - .:/app
   command: python run.py
+mongo:
+  image: mongo
+  volumes:
+    - data:/data
+  ports:
+    - "27017:27017"
