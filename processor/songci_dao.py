@@ -37,9 +37,7 @@ class MongoDAO(AbstractDAO):
     COLLECTION_EMBLEM = 'emblem'
     COLLECTION_SONGCI_CONTENT = 'songci_content'
 
-    logger = logging.getLogger('processor.MongoDAO')
-    logging.basicConfig(level=logging.INFO)
-
+    logger = logging.getLogger(__name__)
     data_source = MongoDataSource()
 
     def load_songci_contents(self):

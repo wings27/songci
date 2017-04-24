@@ -25,7 +25,6 @@ class EmblemProcessor:
     """
 
     logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO)
 
     def __init__(self, emblem_dao):
         self.emblem_dao = emblem_dao
@@ -33,6 +32,7 @@ class EmblemProcessor:
 
         if 'load_emblem_list' in dir(emblem_dao):
             self._emblem_list = emblem_dao.load_emblem_names()
+
 
     @property
     def emblem_list(self):
