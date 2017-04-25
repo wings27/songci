@@ -22,7 +22,7 @@ class WordPattern:
     def fetch_word(self, data_source_dao) -> (str, int):
         where = {}
         if self.tones_regex:
-            where["finals.tones"] = re.compile('^%s$' % self.tones_regex)
+            where["finals.tones"] = re.compile('^{0!s}$'.format(self.tones_regex))
         if self.rhyme:
             where["finals.rhyme"] = self.rhyme
 
@@ -47,7 +47,7 @@ class SongciWriter:
     def write_new(self) -> (str, str):
         if not self._tune.pattern:
             raise ValueError(
-                'pattern for tune [%s] is empty.' % self.tune_name)
+                'pattern for tune [{0!s}] is empty.'.format(self.tune_name))
         self._analyze()
 
         with StringIO() as songci_io:

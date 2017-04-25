@@ -19,7 +19,7 @@ def main(argv):
             tune_name='huanxisha', rhyme='ang', data_source_dao=mongo_dao)
         for i in range(5):
             title, content = songci_writer.write_new()
-            print('\n《%s》\n\n%s\n\n' % (title, content))
+            print('\n《{0!s}》\n\n{1!s}\n\n'.format(title, content))
 
 
 if __name__ == '__main__':
